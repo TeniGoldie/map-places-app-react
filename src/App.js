@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Map from './Map';
 import Places from './Places';
+import Queries from './Queries';
+import Searchbar from './Searchbar';
 import superagent from 'superagent';
 
 class App extends Component {
@@ -16,12 +18,12 @@ class App extends Component {
 
     superagent
     .get(url)
-    .query(null)
+    .query({ query: 'tea' })
     .set('Accept', 'text/json')
     .end((error, response) => {
 
       const venues = response.body.response.venues;
-      // console.log(JSON.stringify(venues));
+      //  console.log(JSON.stringify(venues));
 
       this.setState({
         venues : venues
@@ -32,6 +34,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Queries />
+        <Searchbar />
         <div style={{width:100+'%', height: 400, background: 'lightblue'}}>
           <Map
             center={{lat:35.7082, lng: 139.7305}}
