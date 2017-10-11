@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 
 class Map extends Component {
-
   constructor(){
     super()
     this.state = {
@@ -23,7 +22,16 @@ class Map extends Component {
   }
 
   render() {
-    const markers = this.props.markers || []
+    const markers = this.props.markers.map((venue, i) => {
+
+      const marker = {
+        position: {
+          lat: venue.location.lat,
+          lng: venue.location.lng,
+        }
+      }
+      return <Marker key={i} {...marker} />
+    })
 
     return (
     <div>
@@ -32,10 +40,7 @@ class Map extends Component {
         onDragEnd={this.mapMoved.bind(this)}
         defaultZoom={this.props.zoom}
         defaultCenter={this.props.center}>
-        {markers.map((marker, index) => (
-          <Marker {...marker} />
-          )
-        )}
+        {markers}
       </GoogleMap>
     </div>
     )
