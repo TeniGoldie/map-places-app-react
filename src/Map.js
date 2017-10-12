@@ -18,6 +18,8 @@ class Map extends Component {
   }
 
   render() {
+    
+
     const markers = this.props.markers.map((venue, i) => {
 
       const marker = {

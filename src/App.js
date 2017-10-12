@@ -2,35 +2,43 @@ import React, { Component } from 'react';
 import Map from './Map';
 import Places from './Places';
 import Queries from './Queries';
-import Searchbar from './Searchbar';
 import Nav from './Nav';
+import {Form, FormGroup, FormControl} from 'react-bootstrap';
 import superagent from 'superagent';
 
 class App extends Component {
   constructor(){
     super();
     this.state = {
-      venues: []
+      venues: [],
+      value: ''
     }
   }
 
-  componentDidMount(){
-    const url = 'https://api.foursquare.com/v2/venues/search?v=20161016&ll=35.652832%2C%20139.83947&client_id=ZFQBAJVWWAXEYSR5HBEEAZJFLTW2A3EKM0KYUPC4GPZSSVLG&client_secret=VRQXFP10WTFL1JMMYXKYNKWRLZYTFAASGUP0DXVEGZVQXZIM'
+  async sendRequest(param){
 
-    superagent
-    .get(url)
-    .query({ query: 'tea' })
-    .query({ radius: '20000' })
-    .set('Accept', 'text/json')
-    .end((error, response) => {
-
-      const venues = response.body.response.venues;
-      //  console.log(JSON.stringify(venues));
-
-      this.setState({
-        venues : venues
+    const response = await fetch(`https://api.foursquare.com/v2/venues/search?v=20161016&ll=35.652832%2C%20139.83947&query=${param}&client_id=ZFQBAJVWWAXEYSR5HBEEAZJFLTW2A3EKM0KYUPC4GPZSSVLG&client_secret=VRQXFP10WTFL1JMMYXKYNKWRLZYTFAASGUP0DXVEGZVQXZIM`)
+      .then(results => {
+        return results.json();
       })
-    })
+    const venues = response.response.venues;
+    this.setState({venues : venues})
+  }
+
+  onChange = e => {
+    this.setState({ value: e.target.value })
+  }
+
+  search = e => {
+    e.preventDefault();
+    let param = this.state.value;
+    console.log('this.state.value:' + param);
+    this.sendRequest.bind(this)(param);
+   }
+
+  async componentWillMount(){
+    await this.sendRequest.bind(this)();
+    // sendRequest();
   }
 
   render() {
@@ -38,7 +46,16 @@ class App extends Component {
       <div className="App">
         <Nav />
         <Queries />
-        <Searchbar />
+        <Form onSubmit={this.search}>
+          <FormGroup>
+            <FormControl
+              type="text"
+              value={this.state.value}
+              placeholder="Search"
+              onChange={this.onChange}
+            />
+          </FormGroup>
+        </Form>
         <div style={{width:100+'%', height: 400, background: 'lightblue'}}>
           <Map
             center={{lat:35.7082, lng: 139.7305}}
