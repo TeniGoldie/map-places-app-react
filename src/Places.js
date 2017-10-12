@@ -1,31 +1,47 @@
 import React, { Component } from 'react';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import ReactTable from 'react-table';
+import "react-table/react-table.css";
 
 class Places extends Component {
-  render(){
-    const results = this.props.venues;
-    const list = this.props.venues.map((venue, i) => {
-      return(
-        <li key={i}>{venue.location.address}</li>
-      )
-    })
 
+  render(){
+    const data = this.props.venues;
     return(
       <div>
-        <BootstrapTable data={ results } striped hover condensed>
-          <TableHeaderColumn dataField='name' isKey>Name</TableHeaderColumn>
-          <TableHeaderColumn dataField='id'>City</TableHeaderColumn>
-          <TableHeaderColumn dataField='location'>Street Address</TableHeaderColumn>
-          <TableHeaderColumn dataField='location'>Latitude</TableHeaderColumn>
-          <TableHeaderColumn dataField='location'>Longitude </TableHeaderColumn>
-        </BootstrapTable>
-
-        <ol>
-        <h2>Venues:</h2>
-          {list}
-        </ol>
+        <ReactTable
+          data={data}
+          columns={[
+            {
+              columns: [
+                {
+                  Header: "Name",
+                  accessor: "name"
+                },
+                {
+                  Header: "City",
+                  accessor: "location.city"
+                },
+                {
+                  Header: "Street Address",
+                  accessor: "location.address"
+                },
+                {
+                  Header: "Latitude",
+                  accessor: "location.lat"
+                },
+                {
+                  Header: "Longitude",
+                  accessor: "location.lng"
+                }
+              ]
+            }
+          ]}
+          className="-striped -highlight"
+          showPagination={false}
+        />
       </div>
-    )
+    );
   }
 }
+
 export default Places;

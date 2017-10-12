@@ -9,10 +9,6 @@ class Map extends Component {
     }
   }
 
-  mapMoved(){
-    console.log('mapMoved: ' + JSON.stringify(this.state.map.getCenter()));
-  }
-
   mapLoaded(map){
       if(this.state.map != null)
         return
@@ -37,7 +33,6 @@ class Map extends Component {
     <div>
       <GoogleMap
         ref={this.mapLoaded.bind(this)}
-        onDragEnd={this.mapMoved.bind(this)}
         defaultZoom={this.props.zoom}
         defaultCenter={this.props.center}>
         {markers}
@@ -46,6 +41,5 @@ class Map extends Component {
     )
   }
 }
-
 
 export default withGoogleMap(Map);

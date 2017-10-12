@@ -9,30 +9,34 @@ class Searchbar extends Component {
     }
   }
 
-  searchVenues(e){
-     console.log('searchVenues: ' + this.state.value);
+  onChange = e => {
+    this.setState({ value: e.target.value })
   }
 
-  updateChange(event) {
-      this.setState({
-         value: event.target.value
-       });
-    }
+  search = e => {
+     if (e.keyCode === 13) {
+     let param = this.state.value;
+       console.log('this.state.value:' + param);
+     }
+   }
 
   render(){
+    const param = this.state.value;
     return(
       <div>
+        <br />
         <Form>
           <FormGroup>
             <FormControl
               type="text"
               value={this.state.value}
               placeholder="Search"
-              onChange={this.updateChange.bind(this)}
+              onChange={this.onChange}
+              onKeyDown={this.search}
             />
-            <button onClick={this.searchVenues.bind(this)}>Search</button>
           </FormGroup>
-      </Form>
+        </Form>
+        <p>{param}</p>
       </div>
     )
   }

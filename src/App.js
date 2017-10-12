@@ -3,6 +3,7 @@ import Map from './Map';
 import Places from './Places';
 import Queries from './Queries';
 import Searchbar from './Searchbar';
+import Nav from './Nav';
 import superagent from 'superagent';
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
     superagent
     .get(url)
     .query({ query: 'tea' })
+    .query({ radius: '20000' })
     .set('Accept', 'text/json')
     .end((error, response) => {
 
@@ -34,6 +36,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Nav />
         <Queries />
         <Searchbar />
         <div style={{width:100+'%', height: 400, background: 'lightblue'}}>
