@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import {CSVLink, CSVDownload} from 'react-csv';
+import {CSVLink} from 'react-csv';
 
 class Places extends Component {
-
   render(){
     const data = this.props.venues;
     return(
       <div>
-
       <CSVLink data={data} >Export CSV</CSVLink>
-
         <ReactTable
           data={data}
           columns={[

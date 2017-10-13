@@ -4,7 +4,6 @@ import Places from './Places';
 import Queries from './Queries';
 import Nav from './Nav';
 import {Form, FormGroup, FormControl} from 'react-bootstrap';
-import superagent from 'superagent';
 
 class App extends Component {
   constructor(){
@@ -16,8 +15,11 @@ class App extends Component {
   }
 
   async sendRequest(param){
+    if(param == undefined){
+      param = 'venues';
+    }
 
-    const response = await fetch(`https://api.foursquare.com/v2/venues/search?v=20161016&ll=35.652832%2C%20139.83947&query=${param}&client_id=ZFQBAJVWWAXEYSR5HBEEAZJFLTW2A3EKM0KYUPC4GPZSSVLG&client_secret=VRQXFP10WTFL1JMMYXKYNKWRLZYTFAASGUP0DXVEGZVQXZIM`)
+    const response = await fetch(`https://api.foursquare.com/v2/venues/search?v=20161016&ll=35.708232%2C%20139.7305&query=${param}&client_id=ZFQBAJVWWAXEYSR5HBEEAZJFLTW2A3EKM0KYUPC4GPZSSVLG&client_secret=VRQXFP10WTFL1JMMYXKYNKWRLZYTFAASGUP0DXVEGZVQXZIM`)
       .then(results => {
         return results.json();
       })
@@ -32,20 +34,19 @@ class App extends Component {
   search = e => {
     e.preventDefault();
     let param = this.state.value;
-    console.log('this.state.value:' + param);
+    console.log('param :' + param);
     this.sendRequest.bind(this)(param);
    }
 
   async componentWillMount(){
     await this.sendRequest.bind(this)();
-    // sendRequest();
   }
 
   render() {
     return (
       <div className="App">
         <Nav />
-        <Queries />
+        <Queries param={this.state.value}/>
         <Form onSubmit={this.search}>
           <FormGroup>
             <FormControl
@@ -65,7 +66,7 @@ class App extends Component {
             mapElement={<div style={{height:100+'%'}} />}
           />
         </div>
-        <Places  venues={this.state.venues}/>
+        <Places venues={this.state.venues}/>
       </div>
     );
   }

@@ -9,6 +9,17 @@ class Map extends Component {
     }
   }
 
+  mapMoved(){
+    var mapLat = this.state.map.getCenter();
+    var data = JSON.stringify(mapLat);
+    var parsedData = JSON.parse(data);
+    console.log(parsedData.lat, parsedData.lng);
+  }
+
+  zoomChanged(){
+    console.log('zoomChanged' + this.state.map.getZoom());
+  }
+
   mapLoaded(map){
       if(this.state.map != null)
         return
@@ -18,10 +29,7 @@ class Map extends Component {
   }
 
   render() {
-    
-
     const markers = this.props.markers.map((venue, i) => {
-
       const marker = {
         position: {
           lat: venue.location.lat,
@@ -35,6 +43,8 @@ class Map extends Component {
     <div>
       <GoogleMap
         ref={this.mapLoaded.bind(this)}
+        onDragEnd={this.mapMoved.bind(this)}
+        onZoomChanged={this.zoomChanged.bind(this)}
         defaultZoom={this.props.zoom}
         defaultCenter={this.props.center}>
         {markers}
