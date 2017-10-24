@@ -10,7 +10,9 @@ class App extends Component {
     super();
     this.state = {
       venues: [],
-      value: ''
+      value: '',
+      param: '',
+      queriesarr: []
     }
   }
 
@@ -27,6 +29,13 @@ class App extends Component {
     this.setState({venues : venues})
   }
 
+  addNewQuery(param){
+    let queriesarr = this.state.queriesarr.slice()
+    queriesarr.push(param)
+    this.setState({ queriesarr: queriesarr })
+    console.log('array :' + queriesarr);
+  }
+
   onChange = e => {
     this.setState({ value: e.target.value })
   }
@@ -36,6 +45,8 @@ class App extends Component {
     let param = this.state.value;
     console.log('param :' + param);
     this.sendRequest.bind(this)(param);
+    this.addNewQuery.bind(this)(param);
+    this.setState({ param: param })
    }
 
   async componentWillMount(){
@@ -46,15 +57,16 @@ class App extends Component {
     return (
       <div className="App">
         <Nav />
-        <Queries param={this.state.value}/>
+        <Queries
+          param={this.state.param}
+          queriesarr = {this.state.queriesarr} />
         <Form onSubmit={this.search}>
           <FormGroup>
             <FormControl
               type="text"
-              value={this.state.value}
               placeholder="Search"
-              onChange={this.onChange}
-            />
+              value={this.state.value}
+              onChange={this.onChange} />
           </FormGroup>
         </Form>
         <div style={{width:100+'%', height: 400, background: 'lightblue'}}>
@@ -63,10 +75,9 @@ class App extends Component {
             zoom={13}
             markers={this.state.venues}
             containerElement={<div style={{height:100+'%'}} />}
-            mapElement={<div style={{height:100+'%'}} />}
-          />
+            mapElement={<div style={{height:100+'%'}} />}  />
         </div>
-        <Places venues={this.state.venues}/>
+        <Places venues={this.state.venues} />
       </div>
     );
   }
